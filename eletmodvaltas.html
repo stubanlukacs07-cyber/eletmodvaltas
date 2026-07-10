@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Életmódváltás">
+<meta name="theme-color" content="#123f33">
+<link rel="apple-touch-icon" href="https://stubanlukacs07-cyber.github.io/index.html/icon-180.png">
+<link rel="icon" type="image/png" sizes="512x512" href="https://stubanlukacs07-cyber.github.io/index.html/icon-512.png">
+<title>Életmódváltás</title>
+<style>
+  :root{
+    --bg:#eef2ef; --surface:#ffffff; --surface2:#f4f7f5;
+    --ink:#16211d; --muted:#64726b; --line:#e2e8e3;
+    --acc:#1f6f5c; --acc-d:#123f33; --acc-soft:#e4efea; --acc-lite:#33977c;
+    --g1:#164a3b; --g2:#0f382d;
+    --honey:#cf9b3f; --danger:#a8503f; --r:16px;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);}
+  body{min-height:100dvh;-webkit-text-size-adjust:100%;}
+  button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none;padding:0;-webkit-appearance:none;appearance:none;}
+  input{font-family:inherit;-webkit-appearance:none;appearance:none;}
+  ol,ul{margin:0;padding:0;}
+
+  .hd{position:sticky;top:0;z-index:20;background:linear-gradient(160deg,var(--g1) 0%,var(--acc-d) 60%,var(--g2) 100%);
+    color:#fff;padding:calc(env(safe-area-inset-top) + 12px) 16px 14px;
+    border-bottom-left-radius:22px;border-bottom-right-radius:22px;box-shadow:0 6px 22px rgba(15,40,32,.28);}
+  .hd-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .brand{font-size:13px;letter-spacing:1.6px;font-weight:800;color:rgba(255,255,255,.85);}
+  .brand small{display:block;letter-spacing:.4px;font-weight:500;font-size:10px;color:rgba(255,255,255,.6);margin-top:3px;}
+  .ring{display:block;flex-shrink:0;}
+  .hd-sub{display:flex;align-items:center;gap:10px;margin-top:12px;min-height:40px;}
+  .nav{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.12);font-size:22px;line-height:1;
+    display:flex;align-items:center;justify-content:center;transition:transform .12s,background .15s;}
+  .nav:active{transform:scale(.9);background:rgba(255,255,255,.22);}
+  .hd-day{flex:1;text-align:center;}
+  .hd-dayname{font-size:21px;font-weight:700;letter-spacing:.2px;line-height:1.1;}
+  .hd-date{font-size:12.5px;color:rgba(255,255,255,.7);margin-top:2px;}
+  .totoday,.backtoday{background:var(--honey);color:#3a2a06;font-weight:700;font-size:11px;padding:3px 9px;border-radius:20px;letter-spacing:.3px;}
+  .hd-title{flex:1;font-size:21px;font-weight:700;}
+  .reset{background:rgba(255,255,255,.14);color:#fff;font-size:13px;font-weight:600;padding:9px 14px;border-radius:20px;transition:transform .12s;}
+  .reset:active{transform:scale(.94);}
+  .hd-back{margin-top:10px;text-align:center;}
+  .backtoday{padding:8px 16px;border-radius:20px;transition:transform .12s;}
+  .backtoday:active{transform:scale(.95);}
+
+  .content{padding:15px 14px calc(90px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto;}
+  .eyebrow{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;font-weight:700;color:var(--acc);margin:2px 2px 9px;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:11px;box-shadow:0 1px 2px rgba(20,33,29,.04);}
+
+  .sess{background:var(--acc-d);color:#fff;border:none;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .sess .s-name{font-size:19px;font-weight:700;}
+  .sess .s-tag{font-size:12px;color:rgba(255,255,255,.72);margin-top:3px;}
+  .sess .s-hint{font-size:11.5px;color:rgba(255,255,255,.85);background:rgba(255,255,255,.1);padding:5px 10px;border-radius:20px;text-align:center;line-height:1.35;max-width:44%;}
+
+  .ex-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+  .ex-name{font-size:16px;font-weight:650;line-height:1.25;}
+  .ex-target{font-size:13px;font-weight:600;color:var(--acc);white-space:nowrap;}
+  .pips{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;}
+  .pip{width:30px;height:30px;border-radius:50%;border:2px solid #c4d3cb;background:#fff;position:relative;transition:transform .12s,border-color .18s;}
+  .pip::after{content:"";position:absolute;top:5px;right:5px;bottom:5px;left:5px;border-radius:50%;background:transparent;transition:background .18s;}
+  .pip.on{border-color:var(--acc);}
+  .pip.on::after{background:var(--acc);}
+  .pip:active{transform:scale(.85);}
+  .ex-note{font-size:12.5px;color:var(--muted);margin-top:11px;line-height:1.4;padding-top:10px;border-top:1px solid var(--line);}
+  .card.is-done{background:var(--acc-soft);border-color:rgba(31,111,92,.25);}
+
+  .rest-card{text-align:center;padding:22px 16px;}
+  .lvl-note{font-size:12.5px;color:var(--muted);line-height:1.45;margin:0 4px 12px;padding:0 2px;}
+  .rest-emoji{font-size:30px;}
+  .rest-title{font-size:19px;font-weight:700;margin-top:6px;}
+  .rest-text{font-size:13.5px;color:var(--muted);line-height:1.5;margin:9px auto 16px;max-width:34ch;}
+  .toggle{display:inline-flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--line);padding:11px 16px;border-radius:26px;font-size:14px;font-weight:600;transition:transform .12s;}
+  .toggle:active{transform:scale(.96);}
+  .toggle.on{background:var(--acc);color:#fff;border-color:var(--acc);}
+  .tick{width:22px;height:22px;border-radius:50%;border:2px solid #c4d3cb;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;background:#fff;}
+  .toggle.on .tick{background:#fff;color:var(--acc);border-color:#fff;}
+
+  .track-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .t-eaten{font-size:28px;font-weight:800;letter-spacing:-.6px;font-variant-numeric:tabular-nums;line-height:1;}
+  .t-eaten span{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0;}
+  .t-left{font-size:12px;color:var(--muted);background:var(--surface2);border:1px solid var(--line);padding:5px 10px;border-radius:20px;font-weight:600;white-space:nowrap;}
+  .t-badge{font-size:12px;color:#3a2a06;background:var(--honey);padding:6px 11px;border-radius:20px;font-weight:700;white-space:nowrap;}
+  .t-tag{font-size:12px;color:var(--acc);font-weight:600;margin:9px 0 2px;}
+  .kbar{height:10px;background:var(--surface2);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-top:10px;}
+  .kbar>i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc-lite));border-radius:20px;transition:width .35s ease;}
+  .mrow{display:flex;justify-content:space-between;align-items:baseline;margin-top:13px;font-size:13px;}
+  .mlbl{color:var(--muted);font-weight:600;}
+  .mval{font-weight:700;font-variant-numeric:tabular-nums;}
+  .mval em{font-style:normal;font-weight:500;color:var(--muted);font-size:12px;}
+  .mmini{height:6px;background:var(--surface2);border-radius:20px;overflow:hidden;margin-top:5px;}
+  .mmini>i{display:block;height:100%;background:var(--acc);border-radius:20px;transition:width .35s ease;}
+  .track.is-full{background:var(--acc-soft);border-color:rgba(31,111,92,.25);}
+  .portion-note{font-size:11.5px;color:var(--muted);margin:8px 2px 0;line-height:1.4;}
+  .ing-row{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px solid var(--line);}
+  .ing-row:last-child{border-bottom:none;}
+  .ing-amt{font-weight:700;font-variant-numeric:tabular-nums;min-width:62px;font-size:13.5px;}
+  .ing-nm{flex:1;font-size:13.5px;color:var(--ink);}
+  .ing-sw{width:32px;height:32px;border-radius:9px;background:var(--surface);border:1px solid var(--line);color:var(--acc);font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s;}
+  .ing-sw:active{transform:rotate(180deg) scale(.9);}
+  .ing-sw.ghost{border:none;background:none;}
+  .shop-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:14px;}
+  .shop-total b{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;}
+  .shop-export{margin-top:12px;padding:13px;font-size:14px;}
+  .shop-row .shop-label{flex:1;min-width:0;}
+  .shop-price{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0;}
+  .exp-area{width:100%;height:220px;border:1px solid var(--line);border-radius:12px;padding:12px;font-size:12.5px;line-height:1.55;font-family:inherit;color:var(--ink);background:var(--surface2);resize:none;margin-bottom:14px;}
+  .toast{position:fixed;left:50%;bottom:calc(98px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--acc-d);color:#fff;padding:11px 18px;border-radius:24px;font-size:13.5px;font-weight:600;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.28);}
+
+  .meal{padding:0;overflow:hidden;}
+  .meal-row{display:flex;align-items:center;gap:12px;padding:13px 14px;}
+  .meal-check{flex-shrink:0;width:30px;height:30px;border-radius:50%;border:2px solid #c4d3cb;background:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;transition:transform .12s,background .18s,border-color .18s;}
+  .meal-check.on{background:var(--acc);border-color:var(--acc);}
+  .meal-check:active{transform:scale(.85);}
+  .meal-main{flex:1;text-align:left;min-width:0;}
+  .meal-name{font-size:12px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:var(--acc);}
+  .meal-kcal{font-weight:500;color:var(--muted);letter-spacing:.3px;}
+  .meal-food{font-size:14px;line-height:1.35;margin-top:3px;color:var(--ink);}
+  .meal.is-done .meal-food{color:var(--muted);}
+  .caret{flex-shrink:0;width:30px;height:30px;font-size:22px;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:transform .2s;}
+  .caret.open{transform:rotate(90deg);color:var(--acc);}
+  .prep{background:var(--surface2);border-top:1px solid var(--line);padding:13px 16px 15px;}
+  .prep .p-h{font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:9px;}
+  .prep ol{list-style:none;counter-reset:s;}
+  .prep li{counter-increment:s;position:relative;padding-left:30px;font-size:13.5px;line-height:1.5;margin-bottom:9px;color:var(--ink);}
+  .prep li:last-child{margin-bottom:0;}
+  .prep li::before{content:counter(s);position:absolute;left:0;top:0;width:21px;height:21px;background:var(--acc);color:#fff;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+
+  .prog-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+  .prog-lbl{font-size:14px;font-weight:600;}
+  .prog-num{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;}
+  .bar{height:9px;background:var(--surface2);border-radius:20px;overflow:hidden;border:1px solid var(--line);}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc-lite));border-radius:20px;transition:width .3s ease;}
+  .cat-h{font-size:12px;letter-spacing:1.3px;text-transform:uppercase;font-weight:700;color:var(--acc);margin:20px 4px 9px;}
+  .shop-row{width:100%;display:flex;align-items:center;gap:13px;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:13px 14px;margin-bottom:8px;text-align:left;transition:background .15s;}
+  .shop-row:active{background:var(--surface2);}
+  .box{flex-shrink:0;width:26px;height:26px;border-radius:8px;border:2px solid #c4d3cb;background:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;transition:background .18s,border-color .18s;}
+  .shop-row.is-done .box{background:var(--acc);border-color:var(--acc);}
+  .shop-label{font-size:14.5px;line-height:1.3;}
+  .shop-row.is-done .shop-label{color:var(--muted);text-decoration:line-through;text-decoration-color:#b9c7bf;}
+  .note{font-size:12px;color:var(--muted);line-height:1.5;text-align:center;margin:20px 8px 4px;padding-top:14px;border-top:1px solid var(--line);}
+
+  /* Terv summary */
+  .big-num{font-size:34px;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums;}
+  .big-num span{font-size:14px;font-weight:600;color:var(--muted);}
+  .stat-grid{display:flex;gap:9px;margin-top:12px;}
+  .stat{flex:1;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:11px 6px;text-align:center;}
+  .stat b{display:block;font-size:18px;font-weight:750;font-variant-numeric:tabular-nums;}
+  .stat small{font-size:10.5px;color:var(--muted);letter-spacing:.2px;}
+  .verdict-ok{background:var(--acc-soft);border-color:rgba(31,111,92,.3);}
+  .verdict-warn{background:#fbeee4;border-color:#e6c3a0;}
+  .verdict-h{font-size:15px;font-weight:750;margin-bottom:6px;}
+  .verdict-h.ok{color:var(--acc-d);}
+  .verdict-h.warn{color:#8f4a1f;}
+  .verdict-t{font-size:13.5px;line-height:1.55;color:var(--ink);}
+  .line-row{display:flex;justify-content:space-between;font-size:13.5px;padding:9px 0;border-bottom:1px solid var(--line);}
+  .line-row:last-child{border-bottom:none;}
+  .line-row .k{color:var(--muted);}
+  .line-row .v{font-weight:650;text-align:right;}
+  .btn-primary{display:block;width:100%;background:var(--acc);color:#fff;font-size:15px;font-weight:700;padding:15px;border-radius:14px;text-align:center;transition:transform .12s;margin-top:6px;}
+  .btn-primary:active{transform:scale(.98);}
+  .btn-ghost{display:block;width:100%;background:var(--surface2);color:var(--ink);border:1px solid var(--line);font-size:14px;font-weight:600;padding:13px;border-radius:12px;text-align:center;margin-top:10px;transition:transform .12s;}
+  .btn-ghost:active{transform:scale(.98);}
+
+  /* Onboarding */
+  .ob{max-width:520px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 20px) 20px calc(30px + env(safe-area-inset-bottom));min-height:100dvh;display:flex;flex-direction:column;}
+  .ob-brand{font-size:12px;letter-spacing:2px;font-weight:800;color:var(--acc);text-align:center;margin-bottom:6px;}
+  .ob-prog{height:6px;background:var(--surface2);border-radius:20px;overflow:hidden;margin-bottom:26px;}
+  .ob-prog>i{display:block;height:100%;background:var(--acc);border-radius:20px;transition:width .3s ease;}
+  .ob-step{flex:1;}
+  .ob-hi{font-size:23px;font-weight:800;line-height:1.25;letter-spacing:-.4px;margin-bottom:6px;}
+  .ob-sub{font-size:14px;color:var(--muted);line-height:1.5;margin-bottom:22px;}
+  .ob-opts{display:flex;flex-direction:column;gap:11px;}
+  .ob-opts.two{flex-direction:row;}
+  .ob-opts.two .ob-opt{flex:1;text-align:center;flex-direction:column;gap:8px;padding:22px 12px;}
+  .ob-opt{background:var(--surface);border:2px solid var(--line);border-radius:15px;padding:16px 18px;font-size:15.5px;font-weight:600;text-align:left;display:flex;align-items:center;gap:12px;transition:transform .12s,border-color .15s,background .15s;}
+  .ob-opt:active{transform:scale(.98);}
+  .ob-opt.sel{border-color:var(--acc);background:var(--acc-soft);}
+  .ob-opt .emo{font-size:26px;line-height:1;}
+  .ob-opt .ck{margin-left:auto;width:22px;height:22px;border-radius:50%;border:2px solid #c4d3cb;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
+  .ob-opt.sel .ck{background:var(--acc);border-color:var(--acc);}
+  .ob-fields{display:flex;flex-direction:column;gap:14px;}
+  .ob-field label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px;}
+  .ob-inwrap{display:flex;align-items:center;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:0 16px;}
+  .ob-inwrap:focus-within{border-color:var(--acc);}
+  .ob-inwrap input{flex:1;border:none;outline:none;background:none;font-size:18px;font-weight:700;padding:15px 0;color:var(--ink);width:100%;}
+  .ob-inwrap .unit{font-size:14px;font-weight:600;color:var(--muted);}
+  .ob-unitsel{display:flex;gap:8px;margin-top:2px;}
+  .ob-unitsel button{flex:1;padding:11px;border:2px solid var(--line);border-radius:12px;background:var(--surface);font-size:14px;font-weight:600;}
+  .ob-unitsel button.sel{border-color:var(--acc);background:var(--acc-soft);color:var(--acc-d);}
+  .ob-err{color:var(--danger);font-size:13px;font-weight:600;margin-top:12px;text-align:center;}
+  .ob-nav{display:flex;gap:11px;margin-top:24px;}
+  .ob-next{flex:1;background:var(--acc);color:#fff;font-size:16px;font-weight:700;padding:16px;border-radius:14px;transition:transform .12s;}
+  .ob-next:active{transform:scale(.98);}
+  .ob-back{padding:16px 20px;background:var(--surface2);border:1px solid var(--line);border-radius:14px;font-size:15px;font-weight:600;color:var(--muted);}
+
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);}
+  .tab{flex:1;padding:9px 0 8px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#8b978f;font-size:10.5px;font-weight:600;transition:color .15s;}
+  .tab svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+  .tab.on{color:var(--acc);}
+  .tab:active{transform:scale(.94);}
+
+  .overlay{position:fixed;top:0;right:0;bottom:0;left:0;z-index:50;background:rgba(18,33,29,.55);display:flex;align-items:center;justify-content:center;padding:24px;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);}
+  .dialog{background:#fff;border-radius:18px;padding:20px;max-width:340px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.3);}
+  .dlg-title{font-size:17px;font-weight:750;margin-bottom:6px;}
+  .dlg-text{font-size:14px;color:var(--muted);line-height:1.5;margin-bottom:18px;}
+  .dlg-btns{display:flex;gap:10px;}
+  .dlg-cancel,.dlg-ok{flex:1;padding:12px;border-radius:12px;font-size:14px;font-weight:650;transition:transform .12s;}
+  .dlg-cancel{background:var(--surface2);color:var(--ink);border:1px solid var(--line);}
+  .dlg-ok{background:var(--danger);color:#fff;}
+  .dlg-cancel:active,.dlg-ok:active{transform:scale(.96);}
+  :focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function(){
+"use strict";
+var DAYS=["Vasárnap","Hétfő","Kedd","Szerda","Csütörtök","Péntek","Szombat"];
+var MON=["jan.","feb.","márc.","ápr.","máj.","jún.","júl.","aug.","szep.","okt.","nov.","dec."];
+
+/* ---------- THEME ---------- */
+var THEMES={
+  ferfi:{acc:"#1f6f5c",accd:"#123f33",soft:"#e4efea",lite:"#33977c",g1:"#164a3b",g2:"#0f382d"},
+  no:{acc:"#c24d7b",accd:"#7c2a4c",soft:"#f8e7ef",lite:"#d9749b",g1:"#a03a68",g2:"#5f2043"}
+};
+function applyTheme(sex){
+  var t=THEMES[sex]||THEMES.ferfi, r=document.documentElement.style;
+  r.setProperty("--acc",t.acc); r.setProperty("--acc-d",t.accd); r.setProperty("--acc-soft",t.soft);
+  r.setProperty("--acc-lite",t.lite); r.setProperty("--g1",t.g1); r.setProperty("--g2",t.g2);
+  var m=document.querySelector('meta[name=theme-color]'); if(m) m.setAttribute("content",t.accd);
+}
+
+/* ---------- WORKOUT / MEAL / SHOP DATA ---------- */
+var REST_TEXT="Ma pihensz. Aktív pihenő belefér: séta vagy laza bringa. A regeneráció is a fejlődés része — az ínak és ízületek most érnek utol az izmoknak.";
+var SESS={
+ street:{
+  full:{name:"Teljes test (kalisztenika)",tag:"húzás + nyomás + láb",hint:"Hagyj 1–2 ism. tartalékot",ex:[
+    {n:"Húzódzkodás (pronált)",reps:"4–6",s:4,note:"Aktív vállöv, semleges nyak — ne told előre a fejed."},
+    {n:"Tolódzkodás (dip)",reps:"6–8",s:3,note:"Lassú, kontrollált leengedés."},
+    {n:"Bolgár kitörés",reps:"8–12/láb",s:3,note:"Törzs viszonylag egyenes."},
+    {n:"Fekvőtámasz",reps:"12–15",s:3,note:"Feszes törzs."},
+    {n:"Lábemelés",reps:"12",s:3,note:"Derekat feszesen tartsd."}]},
+  pullA:{name:"Húzás A",tag:"nehéz felső — húzás",hint:"Hagyj 1–2 ism. tartalékot",ex:[
+    {n:"Húzódzkodás (pronált)",reps:"4–6",s:4,note:"Aktív vállöv, semleges nyak."},
+    {n:"Chin-up (szupinált)",reps:"4–6",s:3,note:"Kontrollált leengedés."},
+    {n:"Semleges fogású húzódzkodás",reps:"5–6",s:3,note:"A nyaki szakaszhoz a legkíméletesebb fogás."},
+    {n:"Lábemelés",reps:"12",s:3,note:"Derekat feszesen tartsd."}]},
+  pushA:{name:"Nyomás A",tag:"nehéz felső — nyomás",hint:"Tempóra figyelj",ex:[
+    {n:"Tolódzkodás (dip)",reps:"6–8",s:4,note:"2–3 mp leengedés."},
+    {n:"Straight bar dip",reps:"6–8",s:3,note:"Semleges nyak — ne a fejeddel segíts."},
+    {n:"Fekvőtámasz",reps:"12–15",s:3,note:"Feszes törzs."},
+    {n:"Felülés",reps:"15–20",s:3,note:"Kontrollálva."}]},
+  legs:{name:"Láb + mobilitás",tag:"közepes · súly nélkül",hint:"Válassz 4–5-öt",ex:[
+    {n:"Bolgár kitörés",reps:"8–12/láb",s:4,note:"Fő gyakorlat."},
+    {n:"Pisztolyguggolás progresszió",reps:"5–8/láb",s:3,note:"Dobozra, majd teljes."},
+    {n:"Egylábas csípőemelés",reps:"10–12/láb",s:3,note:"Hátsó lánc."},
+    {n:"Nordic / hídvariáció",reps:"6–10",s:3,note:"Hátsó comb."},
+    {n:"Egylábas vádliemelés",reps:"12–15/láb",s:3,note:""}]},
+  pullB:{name:"Húzás B",tag:"muscle up fókusz",hint:"MU csak a 3. héttől",ex:[
+    {n:"Robbanékony húzódzkodás",reps:"3–5",s:4,note:"Magasra, gyorsan."},
+    {n:"Muscle up / negatív MU",reps:"2–3",s:3,note:"Csak a 3. héttől! Semleges nyak az átmenetnél."},
+    {n:"Chin-up",reps:"5",s:3,note:""},
+    {n:"Lábemelés",reps:"12",s:3,note:""}]},
+  pushB:{name:"Nyomás B",tag:"nehéz felső — nyomás",hint:"Kontrollált mélység",ex:[
+    {n:"Straight bar dip",reps:"6–8",s:4,note:"Semleges nyak."},
+    {n:"Tolódzkodás (dip)",reps:"8",s:3,note:""},
+    {n:"Pike fekvőtámasz",reps:"6–10",s:3,note:"Fej a gerinc vonalában."},
+    {n:"Felülés",reps:"15–20",s:3,note:""}]},
+  skill:{name:"Skill + core",tag:"készség · törzs",hint:"Frissen, pihenten",ex:[
+    {n:"Függés / dead hang",reps:"20–40 mp",s:3,note:"Gerincnyújtás — jólesik a nyaknak is."},
+    {n:"Support tartás (dip tetején)",reps:"20–30 mp",s:3,note:"Vállöv stabilizálás."},
+    {n:"L-sit / tuck L-sit",reps:"10–20 mp",s:3,note:""},
+    {n:"Plank + oldalplank",reps:"30–45 mp",s:3,note:""}]}},
+ gym:{
+  gFull:{name:"Teljes test (súlyzós)",tag:"összetett gyakorlatok",hint:"Az utolsó 1–2 ism. legyen nehéz",ex:[
+    {n:"Guggolás (rúddal)",reps:"6–8",s:3,note:"Mély, kontrollált."},
+    {n:"Fekvenyomás",reps:"6–8",s:3,note:"Lapockát húzd hátra."},
+    {n:"Evezés (rúd)",reps:"8–10",s:3,note:"Húzd a törzsedhez."},
+    {n:"Vállból nyomás",reps:"8–10",s:3,note:"Feszes törzs."},
+    {n:"Plank",reps:"30–45 mp",s:3,note:""}]},
+  gPush:{name:"Nyomás nap",tag:"mell · váll · tricepsz",hint:"",ex:[
+    {n:"Fekvenyomás",reps:"6–8",s:4,note:""},
+    {n:"Ferde padnyomás (dumbbell)",reps:"8–10",s:3,note:""},
+    {n:"Vállból nyomás",reps:"8–10",s:3,note:""},
+    {n:"Oldalemelés",reps:"12–15",s:3,note:""},
+    {n:"Tricepsz nyújtás",reps:"10–12",s:3,note:""}]},
+  gPull:{name:"Húzás nap",tag:"hát · bicepsz",hint:"",ex:[
+    {n:"Húzódzkodás / lehúzás",reps:"6–10",s:4,note:""},
+    {n:"Evezés (rúd)",reps:"8–10",s:3,note:""},
+    {n:"Egykezes evezés",reps:"10–12",s:3,note:""},
+    {n:"Arcvonó (face pull)",reps:"12–15",s:3,note:""},
+    {n:"Bicepsz hajlítás",reps:"10–12",s:3,note:""}]},
+  gLegs:{name:"Láb nap",tag:"comb · far · vádli",hint:"",ex:[
+    {n:"Guggolás (rúddal)",reps:"6–8",s:4,note:""},
+    {n:"Román felhúzás (RDL)",reps:"8–10",s:3,note:"Hátsó comb."},
+    {n:"Lábtolás (leg press)",reps:"10–12",s:3,note:""},
+    {n:"Kitörés",reps:"10–12/láb",s:3,note:""},
+    {n:"Vádliemelés",reps:"12–15",s:3,note:""}]},
+  gUpper:{name:"Felsőtest",tag:"nyomás + húzás",hint:"",ex:[
+    {n:"Fekvenyomás",reps:"6–8",s:4,note:""},
+    {n:"Evezés (rúd)",reps:"8–10",s:4,note:""},
+    {n:"Vállból nyomás",reps:"8–10",s:3,note:""},
+    {n:"Lehúzás / húzódzkodás",reps:"8–10",s:3,note:""},
+    {n:"Bicepsz + tricepsz",reps:"10–12",s:3,note:""}]},
+  gLower:{name:"Alsótest",tag:"comb · far · core",hint:"",ex:[
+    {n:"Guggolás (rúddal)",reps:"6–8",s:4,note:""},
+    {n:"Román felhúzás (RDL)",reps:"8–10",s:3,note:""},
+    {n:"Bolgár kitörés",reps:"10–12/láb",s:3,note:""},
+    {n:"Vádliemelés",reps:"12–15",s:3,note:""},
+    {n:"Lábemelés / plank",reps:"12",s:3,note:""}]}},
+ cardio:{
+  cEasy:{name:"Könnyű futás",tag:"Z2 · alap állóképesség",hint:"Beszélgetős tempó",ex:[
+    {n:"Bemelegítés (séta/kocogás)",reps:"5 perc",s:1,note:""},
+    {n:"Könnyű futás (Z2)",reps:"30–40 perc",s:1,note:"Olyan tempó, ahol tudsz beszélni."},
+    {n:"Levezetés + nyújtás",reps:"5 perc",s:1,note:""}]},
+  cInt:{name:"Intervall",tag:"intenzív",hint:"Alaposan bemelegíts",ex:[
+    {n:"Bemelegítés",reps:"10 perc",s:1,note:""},
+    {n:"2 perc gyors / 2 perc lassú",reps:"6×",s:1,note:"A gyors rész kihívó, de nem sprint."},
+    {n:"Levezetés",reps:"10 perc",s:1,note:""}]},
+  cTempo:{name:"Tempó futás",tag:"küszöb",hint:"",ex:[
+    {n:"Bemelegítés",reps:"10 perc",s:1,note:""},
+    {n:"Tempó (kényelmesen kemény)",reps:"20 perc",s:1,note:""},
+    {n:"Levezetés",reps:"10 perc",s:1,note:""}]},
+  cLong:{name:"Hosszú futás",tag:"kitartás",hint:"Lassan, egyenletesen",ex:[
+    {n:"Hosszú, laza futás",reps:"50–70 perc",s:1,note:"Kényelmes tempó végig."},
+    {n:"Nyújtás",reps:"5–10 perc",s:1,note:""}]},
+  cStr:{name:"Kiegészítő erő",tag:"futóknak · core + láb",hint:"",ex:[
+    {n:"Guggolás (saját súly)",reps:"15",s:3,note:""},
+    {n:"Kitörés",reps:"10/láb",s:3,note:""},
+    {n:"Egylábas csípőemelés",reps:"12/láb",s:3,note:""},
+    {n:"Plank",reps:"30–45 mp",s:3,note:""},
+    {n:"Vádliemelés",reps:"15",s:3,note:""}]}},
+ sport:{
+  sStr:{name:"Erő kiegészítő",tag:"a sportod mellé",hint:"",ex:[
+    {n:"Guggolás / kitörés",reps:"8–10",s:3,note:""},
+    {n:"Fekvőtámasz / nyomás",reps:"10–12",s:3,note:""},
+    {n:"Húzódzkodás / evezés",reps:"6–10",s:3,note:""},
+    {n:"Törzs (plank + oldalplank)",reps:"30–45 mp",s:3,note:""}]},
+  sMob:{name:"Mobilitás + core",tag:"regeneráció",hint:"Nyugodt tempó",ex:[
+    {n:"Csípő- és bokamobilitás",reps:"8–10/oldal",s:2,note:""},
+    {n:"Dinamikus nyújtás",reps:"10 perc",s:1,note:""},
+    {n:"Core kör (plank, csavarás)",reps:"3 kör",s:1,note:""}]},
+  sCond:{name:"Kondicionálás",tag:"sprintek · robbanékonyság",hint:"Jó bemelegítés!",ex:[
+    {n:"Bemelegítés + futóiskola",reps:"10 perc",s:1,note:""},
+    {n:"Sprintek (20–30 m)",reps:"6–8×",s:1,note:"Teljes pihenő a sprintek közt."},
+    {n:"Levezetés",reps:"5 perc",s:1,note:""}]}},
+ mix:{
+  mFull:{name:"Teljes test erő",tag:"súly + saját testsúly",hint:"",ex:[
+    {n:"Guggolás / kitörés",reps:"8–12",s:3,note:""},
+    {n:"Fekvőtámasz / nyomás",reps:"10–12",s:3,note:""},
+    {n:"Húzódzkodás / evezés",reps:"6–10",s:3,note:""},
+    {n:"Csípőemelés",reps:"12",s:3,note:""},
+    {n:"Plank",reps:"30–45 mp",s:3,note:""}]},
+  mCardio:{name:"Kardió",tag:"állóképesség",hint:"",ex:[
+    {n:"Kardió (futás/bringa/evezés)",reps:"25–35 perc",s:1,note:"Közepes tempó."},
+    {n:"Levezetés + nyújtás",reps:"5 perc",s:1,note:""}]},
+  mCore:{name:"Core + mobilitás",tag:"törzs · mozgékonyság",hint:"",ex:[
+    {n:"Plank + oldalplank",reps:"30–45 mp",s:3,note:""},
+    {n:"Lábemelés",reps:"12–15",s:3,note:""},
+    {n:"Superman / hátsó lánc",reps:"12",s:3,note:""},
+    {n:"Mobilitás kör",reps:"8–10 perc",s:1,note:""}]}}
+};
+var SCHED={
+ street:{"1-2":["rest","full","rest","rest","full","rest","rest"],"3":["rest","pullA","rest","pushA","rest","legs","rest"],"4-5":["rest","pullA","pushA","legs","rest","pullB","pushB"],"6-7":["rest","pullA","pushA","legs","pullB","pushB","skill"]},
+ gym:{"1-2":["rest","gFull","rest","rest","gFull","rest","rest"],"3":["rest","gPush","rest","gPull","rest","gLegs","rest"],"4-5":["rest","gPush","gPull","gLegs","gUpper","gLower","rest"],"6-7":["rest","gPush","gPull","gLegs","gPush","gPull","gLegs"]},
+ cardio:{"1-2":["rest","cEasy","rest","rest","cInt","rest","rest"],"3":["rest","cEasy","rest","cInt","rest","cLong","rest"],"4-5":["rest","cEasy","cInt","rest","cTempo","cLong","cStr"],"6-7":["rest","cEasy","cInt","cStr","cTempo","cEasy","cLong"]},
+ sport:{"1-2":["rest","sStr","rest","rest","sCond","rest","rest"],"3":["rest","sStr","rest","sMob","rest","sCond","rest"],"4-5":["rest","sStr","sMob","rest","sCond","sStr","rest"],"6-7":["rest","sStr","sMob","sCond","sStr","sMob","sCond"]},
+ mix:{"1-2":["rest","mFull","rest","rest","mCardio","rest","rest"],"3":["rest","mFull","rest","mCardio","rest","mCore","rest"],"4-5":["rest","mFull","mCardio","mCore","mFull","mCardio","rest"],"6-7":["rest","mFull","mCardio","mCore","mFull","mCardio","mCore"]}
+};
+function levelMult(l){ return l==="kezdo"?0.7:l==="ujra"?0.85:l==="halado"?1.15:1; }
+function schedFor(){ var p=profile||{},ty=SCHED[p.type]?p.type:"street",fq=SCHED[ty][p.freq]?p.freq:"4-5"; return SCHED[ty][fq]; }
+function freqDays(){ var sc=schedFor(),n=0; for(var i=0;i<7;i++) if(sc[i]!=="rest") n++; return n; }
+function lvlHint(l){ return {kezdo:"Kezdő szint — a technikán és a könnyebb progressziókon a hangsúly; hagyj 2–3 ismétlést tartalékban.",ujra:"Újrakezdő — az izommemória gyorsan visszahoz, de az ínak és ízületek lassabban érnek utol, ezért az első hetekben tarts vissza.",kozep:"Középhaladó — fokozatos túlterhelés, hétről hétre apró progresszió.",halado:"Haladó — nagyobb volumen és intenzitás, haladó variációk."}[l]||""; }
+function workoutFor(dow){ var p=profile||{},ty=SESS[p.type]?p.type:"street",sc=schedFor(),key=sc[dow];
+  if(!key||key==="rest") return {rest:true,text:REST_TEXT};
+  var base=SESS[ty][key]; if(!base) return {rest:true,text:REST_TEXT};
+  var mult=levelMult(p.level),ex=base.ex.map(function(e){ var s2=e.s<=1?e.s:Math.min(6,Math.max(2,Math.round(e.s*mult))); return {n:e.n,reps:e.reps,s:s2,note:e.note}; });
+  return {name:base.name,tag:base.tag,hint:base.hint,ex:ex}; }
+var ING={
+ csirke:{n:"csirkemell",p:23,c:0,f:2,tags:["meat"],cat:"hus",price:2000,grp:"leanmeat",step:10},
+ pulyka:{n:"pulykamell",p:24,c:0,f:1,tags:["meat"],cat:"hus",price:2200,grp:"leanmeat",step:10},
+ comb:{n:"csirkecomb (bőr nélkül)",p:19,c:0,f:6,tags:["meat"],cat:"hus",price:1400,grp:"leanmeat",step:10},
+ marha:{n:"sovány marha",p:21,c:0,f:5,tags:["meat"],cat:"hus",price:3500,grp:"redmeat",step:10},
+ darabmarha:{n:"sovány darált marha",p:21,c:0,f:6,tags:["meat"],cat:"hus",price:2800,grp:"redmeat",step:10},
+ hal:{n:"fehér halfilé",p:18,c:0,f:1,tags:["fish"],cat:"hus",price:2500,grp:"fish",step:10},
+ tojas:{n:"tojás",u:"db",ug:60,p:12.6,c:1,f:10.6,tags:["egg"],cat:"tojas",price:2200,grp:"egg",step:60},
+ skyr:{n:"Skyr",p:11,c:4,f:0.2,tags:["lac"],cat:"tej",price:2500,grp:"dairyprot",step:10},
+ gorog:{n:"görög joghurt",p:10,c:3.6,f:0.4,tags:["lac"],cat:"tej",price:1800,grp:"dairyprot",step:10},
+ turo:{n:"túró",p:16,c:3,f:2,tags:["lac"],cat:"tej",price:2500,grp:"dairyprot",step:10},
+ tej:{n:"tej (2,8%)",u:"ml",p:3.3,c:4.7,f:2.8,tags:["lac"],cat:"tej",price:400,grp:"milk",step:10},
+ zab:{n:"zabpehely",p:13,c:60,f:7,tags:[],cat:"szaraz",price:500,grp:"oats",step:5},
+ rizs:{n:"rizs",p:7,c:78,f:1,tags:[],cat:"szaraz",price:500,grp:"grain",step:5},
+ teszta:{n:"teljes kiőrlésű tészta",p:13,c:63,f:2.5,tags:["glu"],cat:"szaraz",price:700,grp:"grain",step:5},
+ quinoa:{n:"quinoa",p:14,c:64,f:6,tags:[],cat:"szaraz",price:1500,grp:"grain",step:5},
+ kenyer:{n:"teljes kiőrlésű kenyér",u:"szelet",ug:40,p:9,c:43,f:3.5,tags:["glu"],cat:"pek",price:500,grp:"bread",step:40},
+ burgonya:{n:"burgonya",p:2,c:17,f:0.1,tags:[],cat:"zold",price:300,grp:"carbveg",step:10},
+ edesburgonya:{n:"édesburgonya",p:1.6,c:20,f:0.1,tags:[],cat:"zold",price:600,grp:"carbveg",step:10},
+ banan:{n:"banán",u:"db",ug:120,p:1.1,c:23,f:0.3,tags:[],cat:"zold",price:500,grp:"fruit",step:120},
+ alma:{n:"alma",u:"db",ug:150,p:0.3,c:14,f:0.2,tags:[],cat:"zold",price:500,grp:"fruit",step:150},
+ gyum:{n:"gyümölcs",p:1,c:14,f:0.2,tags:[],cat:"zold",price:600,grp:"fruit",step:10},
+ bogyos:{n:"bogyós gyümölcs",p:1,c:12,f:0.3,tags:[],cat:"fagy",price:1500,grp:"fruit",step:10},
+ salata:{n:"vegyes saláta",p:1.5,c:3,f:0.2,tags:[],cat:"zold",price:1500,grp:"veg",step:10},
+ paradicsom:{n:"paradicsom",p:0.9,c:3.9,f:0.2,tags:[],cat:"zold",price:600,grp:"veg",step:10},
+ paprika:{n:"paprika",p:1,c:6,f:0.3,tags:[],cat:"zold",price:800,grp:"veg",step:10},
+ wok:{n:"wok zöldség",p:2,c:7,f:0.5,tags:[],cat:"fagy",price:800,grp:"veg",step:10},
+ zoldseg:{n:"párolt zöldség",p:2,c:7,f:0.5,tags:[],cat:"zold",price:600,grp:"veg",step:10},
+ avokado:{n:"avokádó",u:"db",ug:100,p:2,c:9,f:15,tags:[],cat:"zold",price:1600,grp:"fat",step:50},
+ olaj:{n:"olívaolaj",u:"ml",p:0,c:0,f:100,tags:[],cat:"kamra",price:3000,grp:"oil",step:1},
+ mogyorovaj:{n:"mogyoróvaj",p:25,c:20,f:50,tags:["nut"],cat:"kamra",price:3000,grp:"nutbutter",step:5},
+ mandula:{n:"mandula",p:21,c:22,f:50,tags:["nut"],cat:"kamra",price:4000,grp:"nuts",step:5},
+ dio:{n:"dió",p:15,c:14,f:65,tags:["nut"],cat:"kamra",price:4000,grp:"nuts",step:5},
+ tokmag:{n:"tökmag",p:19,c:14,f:49,tags:[],cat:"kamra",price:3500,grp:"nuts",step:5},
+ mez:{n:"méz",p:0,c:82,f:0,tags:[],cat:"kamra",price:2500,grp:"sweet",step:5},
+ passata:{n:"paradicsomszósz",p:1.5,c:6,f:0.3,tags:[],cat:"kamra",price:600,grp:"sauce",step:10},
+ tofu:{n:"tofu",p:12,c:2,f:7,tags:[],cat:"hutott",price:2000,grp:"dairyprot",step:10}
+};
+var SWAPGRP={leanmeat:["csirke","pulyka","comb"],redmeat:["marha","darabmarha"],dairyprot:["skyr","gorog","turo"],grain:["rizs","teszta","quinoa"],carbveg:["burgonya","edesburgonya"],fruit:["banan","alma","gyum","bogyos"],veg:["salata","paradicsom","paprika","wok","zoldseg"],nuts:["dio","mandula","tokmag"]};
+var MEALS={
+ 1:[{m:"Reggeli",i:[["zab",80],["tej",300],["banan",120],["mogyorovaj",15]],pr:["Zabpelyhet a tejjel forrald fel, főzd 3–5 percig.","Keverd bele a mogyoróvajat + fahéj.","Tetejére a karikázott banán."]},
+   {m:"Tízórai · edzés előtt",i:[["alma",150],["mandula",20]],pr:["Nasi edzés előtt ~1–1,5 órával."]},
+   {m:"Ebéd · edzés után",i:[["csirke",180],["rizs",90],["salata",120],["olaj",12]],pr:["Csirkét fűszerezd, süsd át ~6–7 perc oldalanként.","Rizst főzd meg.","Saláta olívaolajjal."]},
+   {m:"Uzsonna",i:[["skyr",200],["bogyos",100]],pr:["Bogyós gyümölcsöt a Skyrbe."]},
+   {m:"Vacsora",i:[["marha",150],["burgonya",300],["zoldseg",150]],pr:["Marhát párold puhára (vagy maradék pörkölt).","Burgonyát süsd héjában.","Mellé párolt zöldség."]}],
+ 2:[{m:"Reggeli",i:[["tojas",240],["kenyer",80],["paradicsom",100],["alma",150]],pr:["Tojást süsd tükör-/rántottának.","Kenyeret pirítsd, mellé paradicsom.","Desszertnek alma."]},
+   {m:"Tízórai · edzés előtt",i:[["gorog",200],["zab",40],["mez",7]],pr:["Joghurt + zab + méz összekeverve."]},
+   {m:"Ebéd · edzés után",i:[["pulyka",200],["teszta",80],["passata",100],["paprika",80]],pr:["Tésztát főzd al dentére.","Pulykát piríts le.","Passata + paprika hozzá, keverd össze."]},
+   {m:"Uzsonna",i:[["banan",120],["dio",30]],pr:["Nassolnivaló."]},
+   {m:"Vacsora",i:[["hal",180],["burgonya",250],["tej",50],["salata",100]],pr:["Halat süsd át ~10–12 perc.","Burgonyából pürét törj kevés tejjel.","Mellé saláta."]}],
+ 3:[{m:"Reggeli",i:[["turo",250],["zab",40],["alma",150],["mez",10]],pr:["Túrót a zabbal, fahéjjal keverd.","Reszelt alma + méz."]},
+   {m:"Tízórai",i:[["tojas",120],["kenyer",40]],pr:["Tojást főzd keményre, mellé kenyér."]},
+   {m:"Ebéd · edzés után",i:[["comb",180],["rizs",70],["wok",150]],pr:["Csirkecombot süsd át.","Rizst főzd meg.","Wok zöldség forró serpenyőn 4–6 perc."]},
+   {m:"Uzsonna",i:[["skyr",200],["gyum",100],["dio",15]],pr:["Skyrbe gyümölcs és dió."]},
+   {m:"Vacsora",i:[["darabmarha",150],["zoldseg",150],["burgonya",150]],pr:["Darált marhát piríts le.","Zöldségekkel párold ragunak.","Mellé burgonya."]}],
+ 4:[{m:"Reggeli",i:[["tojas",180],["kenyer",40],["avokado",60],["paradicsom",80]],pr:["Tojást süss/főzz.","Kenyérre tört avokádó.","Mellé paradicsom."]},
+   {m:"Tízórai",i:[["gorog",200],["dio",20]],pr:["Joghurtba dió + fahéj."]},
+   {m:"Ebéd",i:[["csirke",180],["salata",120],["quinoa",40],["olaj",12]],pr:["Csirkét süsd át.","Quinoát főzd.","Nagy saláta olívaolajjal."]},
+   {m:"Uzsonna",i:[["turo",150],["gyum",120]],pr:["Túró mellé gyümölcs."]},
+   {m:"Vacsora",i:[["marha",180],["zoldseg",200],["burgonya",150]],pr:["Marhát párold/piríts.","Sok zöldség + burgonya."]}],
+ 5:[{m:"Reggeli",i:[["zab",80],["tej",300],["banan",120],["mogyorovaj",20]],pr:["Zabkását főzz a tejjel.","Mogyoróvaj + banán a tetejére."]},
+   {m:"Tízórai · edzés előtt",i:[["alma",150],["kenyer",40],["mez",15]],pr:["Pirítós mézzel + alma."]},
+   {m:"Ebéd · edzés után",i:[["csirke",200],["rizs",90],["salata",120],["olaj",12]],pr:["Csirkét süsd át.","Rizst főzd.","Saláta olívaolajjal."]},
+   {m:"Uzsonna",i:[["skyr",200],["bogyos",100],["mez",7]],pr:["Skyrbe bogyós + méz."]},
+   {m:"Vacsora",i:[["marha",150],["edesburgonya",300],["zoldseg",150]],pr:["Marhát párold.","Édesburgonyát süsd.","Mellé zöldség."]}],
+ 6:[{m:"Reggeli",i:[["tojas",240],["kenyer",80],["paradicsom",100],["alma",150]],pr:["Tojást süsd.","Kenyér + paradicsom.","Gyümölcs."]},
+   {m:"Tízórai · edzés előtt",i:[["gorog",200],["zab",40],["mez",7]],pr:["Összekeverve."]},
+   {m:"Ebéd · edzés után",i:[["pulyka",200],["teszta",80],["passata",100],["paprika",80]],pr:["Tésztát főzz.","Húst piríts.","Passata + paprika."]},
+   {m:"Uzsonna",i:[["banan",120],["mandula",30]],pr:["Nassolnivaló."]},
+   {m:"Vacsora",i:[["hal",180],["burgonya",250],["salata",100]],pr:["Halat süsd.","Burgonyát főzd/süsd.","Saláta."]}],
+ 0:[{m:"Reggeli",i:[["turo",250],["gyum",120],["dio",15]],pr:["Túró + dió + fahéj + gyümölcs."]},
+   {m:"Tízórai",i:[["tojas",180],["paradicsom",80]],pr:["Tojást főzd, mellé zöldség."]},
+   {m:"Ebéd",i:[["csirke",180],["salata",120],["rizs",40],["olaj",12]],pr:["Csirkét süsd.","Rizst főzd.","Saláta."]},
+   {m:"Uzsonna",i:[["skyr",200],["gyum",100]],pr:["Skyrbe gyümölcs."]},
+   {m:"Vacsora",i:[["marha",180],["zoldseg",200],["burgonya",150]],pr:["Marhát párold/piríts.","Zöldség + burgonya."]}]
+};
+var SHOP=[
+  {c:"Hús & hal",items:["Csirkemell — ~1 kg","Pulyka- v. csirkemell — +200 g","Csirkecomb, bőr nélkül — ~200 g","Sovány marha, kockázva — ~500 g","Sovány darált marha — ~300 g","Fehér halfilé, fagyasztott — ~600 g"]},
+  {c:"Tojás & tejtermék",items:["L-es tojás — 18–20 db","Tej 2,8% — ~1 l","Skyr — ~800 g","Görög joghurt — ~600 g","Túró — ~700 g"]},
+  {c:"Zöldség & gyümölcs",items:["Vegyes salátaalap — 2 fej/zacskó","Paradicsom — ~500 g","Paprika — 3–4 db","Burgonya — ~1,5 kg","Édesburgonya — ~400 g","Alma — 4–5 db","Banán — 4–5 db","Avokádó — 1 db"]},
+  {c:"Fagyasztott",items:["Bogyós gyümölcs — ~400 g","Zöldségkeverék, wok/párolt — ~1 kg"]},
+  {c:"Száraz áru & pékáru",items:["Zabpehely — 1 csomag","Rizs — 1 csomag","Teljes kiőrlésű tészta — 1 csomag","Teljes kiőrlésű kenyér — 1 vekni"]},
+  {c:"Kamra · ritkán",items:["Olívaolaj","Mogyoróvaj","Mandula — ~100 g","Dió — ~100 g","Méz","Paradicsomkonzerv / passata — 1–2 db","Fűszerek: só, bors, pirospaprika, fahéj"]}
+];
+
+/* ---------- ENGINE ---------- */
+function bmr(p){ var b=10*p.kg+6.25*p.cm-5*p.age; return p.sex==="no"?b-161:b+5; }
+function actMult(f){ return f==="1-2"?1.375:f==="3"?1.45:f==="4-5"?1.55:1.65; }
+function tdee(p){ return bmr(p)*actMult(p.freq); }
+function round5(n){ return Math.round(n/5)*5; }
+
+function computePlan(p){
+  var T=tdee(p), B=bmr(p), kg=p.kg;
+  var goal=p.goal, feasible=true, verdict="", weeklyRate=0, etaWeeks=0, target=T;
+  var proteinPerKg = (goal==="karban")?1.8:2.0;
+  var protein=Math.round(kg*proteinPerKg), fat=Math.round(kg*0.9);
+
+  if(goal==="fogyas"){
+    var reqRate=p.targetKg/p.weeks;           // kg/hét kívánt
+    var maxRate=0.010*kg, recRate=0.0066*kg;  // egészséges max / ajánlott
+    if(reqRate>maxRate+1e-9){
+      feasible=false; weeklyRate=maxRate;
+      etaWeeks=Math.ceil(p.targetKg/recRate);
+      var loKg=Math.round(recRate*p.weeks*10)/10, hiKg=Math.round(maxRate*p.weeks*10)/10;
+      verdict="Sajnos "+fmtKg(p.targetKg)+" "+p.weeks+" hét alatt egészségesen nem reális — ez heti "+fmtKg(reqRate)+"-ot jelentene, ami az izom rovására menne. Reálisan ~"+fmtKg(loKg)+"–"+fmtKg(hiKg)+" adható le ennyi idő alatt biztonságosan. A teljes "+fmtKg(p.targetKg)+"-hoz ~"+etaWeeks+" hét kellene. Az alábbi terv a leggyorsabb egészséges ütemre van belőve.";
+    } else { weeklyRate=reqRate; verdict="A célod reális. Heti ~"+fmtKg(weeklyRate)+"-os ütemmel "+fmtKg(p.targetKg)+" "+p.weeks+" hét alatt elérhető, az izom megtartása mellett."; }
+    var dailyDef=weeklyRate*7700/7;
+    var maxDef=Math.max(0, Math.min(T-B, 0.28*T));  // ne menj a BMR alá, max ~28%
+    if(dailyDef>maxDef){ dailyDef=maxDef; weeklyRate=dailyDef*7/7700; }
+    target=Math.round(T-dailyDef);
+  } else if(goal==="izom"){
+    var surplus=(p.level==="kezdo"||p.level==="ujra")?350:(p.level==="kozep"?250:150);
+    target=Math.round(T+surplus);
+    var reqG=p.targetKg/p.weeks;
+    var maxG=(p.level==="kezdo")?0.25:(p.level==="ujra")?0.30:(p.level==="kozep")?0.12:0.06;
+    if(reqG>maxG+1e-9){ feasible=false; weeklyRate=maxG; etaWeeks=Math.ceil(p.targetKg/maxG);
+      var hiG=Math.round(maxG*p.weeks*10)/10;
+      verdict="Sajnos "+fmtKg(p.targetKg)+" tiszta izom "+p.weeks+" hét alatt nem reális — az izomépítés ennél jóval lassabb. Reálisan ~"+fmtKg(hiG)+" izom építhető ennyi idő alatt a szintedhez mérten. A teljes "+fmtKg(p.targetKg)+"-hoz ~"+etaWeeks+" hét kellene. Az alábbi terv a maximális egészséges építő ütemre van belőve.";
+    } else { weeklyRate=reqG; verdict="A célod reális. A szintedhez mérten "+fmtKg(p.targetKg)+" izom "+p.weeks+" hét alatt reálisan felépíthető, kontrollált többlettel."; }
+  } else if(goal==="rekomp"){
+    target=Math.round(T-150); protein=Math.round(kg*2.0);
+    verdict="Rekompozíció: enyhe deficit + magas fehérje. Egyszerre épül izom és fogy a zsír — lassú, de a mérleg alig mozdul, a tükör viszont változik. Türelmes út.";
+  } else {
+    target=Math.round(T);
+    verdict="Karbantartás: a súlyodat tartod, a hangsúly az erőn, a teljesítményen és a szokások rögzítésén van.";
+  }
+  var carb=Math.max(40, Math.round((target-protein*4-fat*9)/4));
+  return {tdee:Math.round(T), bmr:Math.round(B), target:target, protein:protein, fat:fat, carb:carb, feasible:feasible, verdict:verdict, weeklyRate:weeklyRate, etaWeeks:etaWeeks};
+}
+function fmtKg(n){ var r=Math.round(n*10)/10; return (r%1===0?r.toFixed(0):r.toFixed(1))+" kg"; }
+function has(g,tg){ return g&&g.tags&&g.tags.indexOf(tg)>=0; }
+function ingMac(id,grams){ var g=ING[id]||{p:0,c:0,f:0},r=grams/100,p=g.p*r,c=g.c*r,f=g.f*r; return {p:p,c:c,f:f,kc:p*4+c*4+f*9}; }
+function resolveIng(id){ var pf=profile||{},sw=pf.swaps||{},diet=pf.diet||[]; if(sw[id]&&ING[sw[id]]) id=sw[id];
+  if(diet.indexOf("veget")>=0&&(has(ING[id],"meat")||has(ING[id],"fish"))) id="tofu";
+  if(diet.indexOf("hal")>=0&&has(ING[id],"fish")) id="csirke";
+  if(diet.indexOf("tojas")>=0&&has(ING[id],"egg")) id="turo";
+  if(diet.indexOf("dio")>=0&&has(ING[id],"nut")) id="tokmag"; return id; }
+function ingName(id){ var g=ING[id]; if(!g) return id; var nm=g.n,diet=(profile&&profile.diet)||[];
+  if(diet.indexOf("laktoz")>=0&&has(g,"lac")) nm="laktózmentes "+nm;
+  if(diet.indexOf("glutation")>=0&&has(g,"glu")) nm="gluténmentes "+nm; return nm; }
+function dispAmt(id,grams){ var g=ING[id]||{}; if(g.u==="db"){return Math.max(1,Math.round(grams/g.ug))+" db";} if(g.u==="szelet"){return Math.max(1,Math.round(grams/g.ug))+" szelet";} if(g.u==="ml"){return Math.round(grams)+" ml";} return Math.round(grams)+" g"; }
+function roundStep(grams,step){ step=step||5; return Math.max(step,Math.round(grams/step)*step); }
+function nextInGroup(oid){ var grp=ING[oid]&&ING[oid].grp,arr=SWAPGRP[grp]; if(!arr||arr.length<2) return oid; var cur=(profile.swaps&&profile.swaps[oid])?profile.swaps[oid]:oid,ix=arr.indexOf(cur); if(ix<0) ix=0; return arr[(ix+1)%arr.length]; }
+function swappable(oid){ var grp=ING[oid]&&ING[oid].grp,arr=SWAPGRP[grp]; return !!(arr&&arr.length>1); }
+function mealTotals(meal,factor){ var kc=0,p=0,c=0,f=0; for(var j=0;j<meal.i.length;j++){ var rid=resolveIng(meal.i[j][0]),g2=roundStep(meal.i[j][1]*factor,ING[rid].step),m=ingMac(rid,g2); kc+=m.kc;p+=m.p;c+=m.c;f+=m.f; } return {kc:Math.round(kc),p:Math.round(p),c:Math.round(c),f:Math.round(f)}; }
+function mealFoodLine(meal,factor){ var parts=[]; for(var j=0;j<meal.i.length;j++){ var rid=resolveIng(meal.i[j][0]),g2=roundStep(meal.i[j][1]*factor,ING[rid].step); parts.push(dispAmt(rid,g2)+" "+ingName(rid)); } return parts.join(" + "); }
+function dayBaseKc(dow){ var a=MEALS[dow],s=0; for(var i=0;i<a.length;i++){ var it=a[i].i; for(var j=0;j<it.length;j++) s+=ingMac(resolveIng(it[j][0]),it[j][1]).kc; } return s; }
+function dayFactor(dow){ var b=dayBaseKc(dow); return b>0?dayTarget(dow)/b:1; }
+
+/* ---------- STATE ---------- */
+var PKEY="eletmod_profile_v1", DKEY="eletmodvaltas_v1";
+var profile=null; try{ var pr=localStorage.getItem(PKEY); if(pr) profile=JSON.parse(pr); }catch(e){}
+var state={days:{},shop:{}}; var storageOK=true;
+try{ var raw=localStorage.getItem(DKEY); if(raw) state=JSON.parse(raw); }catch(e){ storageOK=false; }
+if(!state.days) state.days={}; if(!state.shop) state.shop={};
+function saveState(){ try{ localStorage.setItem(DKEY,JSON.stringify(state)); }catch(e){ storageOK=false; } }
+function saveProfile(){ try{ localStorage.setItem(PKEY,JSON.stringify(profile)); }catch(e){} }
+
+var tab="terv", sel=new Date(), openMeal=-1, modal=false, toast="", exportModal="";
+var onboarding=!profile, obStep=0, obDraft={}, obErr="";
+if(profile) applyTheme(profile.sex);
+
+/* ---------- ONBOARDING ---------- */
+var OB_STEPS=["sex","stats","type","freq","level","goal","target","diet","result"];
+function obVisible(){ // skip target step when goal has no numeric target
+  return OB_STEPS.filter(function(s){ if(s==="target" && obDraft.goal && obDraft.goal!=="fogyas" && obDraft.goal!=="izom") return false; return true; });
+}
+function obIndex(){ return obVisible().indexOf(OB_STEPS_current()); }
+var _curStep="sex";
+function OB_STEPS_current(){ return _curStep; }
+
+function renderOnboarding(){
+  var steps=obVisible(); var idx=steps.indexOf(_curStep); if(idx<0){ _curStep=steps[0]; idx=0; }
+  var pct=Math.round((idx)/(steps.length-1)*100);
+  var body="";
+  if(_curStep==="sex"){
+    body='<div class="ob-hi">Kezdjük veled!</div><div class="ob-sub">Pár kérdés, és összeállítom a személyre szabott tervedet. Először: melyik jellemző rád?</div>'+
+      '<div class="ob-opts two">'+obOpt("sex","ferfi","Férfi","💪")+obOpt("sex","no","Nő","🌸")+'</div>';
+  } else if(_curStep==="stats"){
+    body='<div class="ob-hi">Az alapadataid</div><div class="ob-sub">Ezekből számolom ki az energiaszükségletedet.</div>'+
+      '<div class="ob-fields">'+
+      field("Életkor","in-age",obDraft.age,"év","numeric")+
+      field("Testmagasság","in-cm",obDraft.cm,"cm","numeric")+
+      field("Testsúly","in-kg",obDraft.kg,"kg","decimal")+'</div>';
+  } else if(_curStep==="type"){
+    body='<div class="ob-hi">Milyen edzést végzel?</div><div class="ob-sub">A terv erre épül majd.</div>'+
+      '<div class="ob-opts">'+obOpt("type","street","Street workout / kalisztenika","🤸")+obOpt("type","gym","Konditerem (súlyzós)","🏋️")+obOpt("type","cardio","Kardió / futás","🏃")+obOpt("type","sport","Csapatsport","⚽")+obOpt("type","mix","Vegyes","🔀")+'</div>';
+  } else if(_curStep==="freq"){
+    body='<div class="ob-hi">Milyen gyakran edzel?</div><div class="ob-sub">Hetente hány alkalom, nagyjából.</div>'+
+      '<div class="ob-opts">'+obOpt("freq","1-2","Heti 1–2 alkalom","")+obOpt("freq","3","Heti 3 alkalom","")+obOpt("freq","4-5","Heti 4–5 alkalom","")+obOpt("freq","6-7","Heti 6–7 alkalom","")+'</div>';
+  } else if(_curStep==="level"){
+    body='<div class="ob-hi">Milyen szinten vagy?</div><div class="ob-sub">Hogy jól lőjem be a terhelést és a haladást.</div>'+
+      '<div class="ob-opts">'+obOpt("level","kezdo","Kezdő — most kezdem","🌱")+obOpt("level","ujra","Újrakezdő — volt már, most visszatérek","🔄")+obOpt("level","kozep","Középhaladó — évek óta edzek","💪")+obOpt("level","halado","Haladó — komoly tapasztalat","🔥")+'</div>';
+  } else if(_curStep==="goal"){
+    body='<div class="ob-hi">Mi a fő célod?</div><div class="ob-sub">Ez határozza meg a kalóriát és a makrókat.</div>'+
+      '<div class="ob-opts">'+obOpt("goal","fogyas","Zsírvesztés","📉")+obOpt("goal","izom","Izomépítés","📈")+obOpt("goal","rekomp","Rekompozíció (egyszerre)","⚖️")+obOpt("goal","karban","Karbantartás","🎯")+'</div>';
+  } else if(_curStep==="target"){
+    var isLoss=obDraft.goal==="fogyas";
+    body='<div class="ob-hi">'+(isLoss?"Mennyit szeretnél leadni?":"Mennyi izmot céloznál?")+'</div>'+
+      '<div class="ob-sub">Add meg a célt és a keretet — megnézem, mennyire reális egészségesen.</div>'+
+      '<div class="ob-fields">'+field(isLoss?"Cél (leadandó)":"Cél (izom)","in-target",obDraft.targetKg,"kg","decimal")+
+      '<div class="ob-field"><label>Időkeret</label>'+
+        '<div class="ob-inwrap"><input id="in-weeks" inputmode="numeric" value="'+(obDraft.tval||"")+'" placeholder="pl. 12"><span class="unit" id="unit-lbl">'+(obDraft.tunit==="honap"?"hónap":"hét")+'</span></div>'+
+        '<div class="ob-unitsel"><button data-act="ob-unit" data-v="het" class="'+(obDraft.tunit!=="honap"?"sel":"")+'">hét</button><button data-act="ob-unit" data-v="honap" class="'+(obDraft.tunit==="honap"?"sel":"")+'">hónap</button></div>'+
+      '</div></div>';
+  } else if(_curStep==="diet"){
+    body='<div class="ob-hi">Van étkezési korlátod?</div><div class="ob-sub">Jelöld, amire allergiás/érzékeny vagy, vagy amit kerülsz — a cserék a következő lépésben épülnek be. Több is választható.</div>'+
+      '<div class="ob-opts">'+dietOpt("laktoz","Laktózérzékeny","🥛")+dietOpt("glutation","Gluténérzékeny","🌾")+dietOpt("tojas","Tojásallergia","🥚")+dietOpt("hal","Halallergia","🐟")+dietOpt("dio","Diófélék allergia","🥜")+dietOpt("veget","Vegetáriánus","🥗")+'</div>';
+  } else if(_curStep==="result"){
+    return obResult(pct);
+  }
+  var isFirst=(idx===0);
+  var html='<div class="ob"><div class="ob-brand">ÉLETMÓDVÁLTÁS</div><div class="ob-prog"><i style="width:'+Math.max(6,pct)+'%"></i></div>'+
+    '<div class="ob-step">'+body+(obErr?'<div class="ob-err">'+obErr+'</div>':'')+'</div>'+
+    '<div class="ob-nav">'+(isFirst?'':'<button class="ob-back" data-act="ob-back">Vissza</button>')+
+    '<button class="ob-next" data-act="ob-next">Tovább</button></div></div>';
+  document.getElementById("root").innerHTML=html;
+}
+function obOpt(key,val,label,emo){
+  var sel=obDraft[key]===val;
+  return '<button class="ob-opt '+(sel?"sel":"")+'" data-act="ob-pick" data-key="'+key+'" data-v="'+val+'">'+(emo?'<span class="emo">'+emo+'</span>':'')+'<span>'+label+'</span><span class="ck">'+(sel?"✓":"")+'</span></button>';
+}
+function dietOpt(val,label,emo){
+  var arr=obDraft.diet||[], sel=arr.indexOf(val)>=0;
+  return '<button class="ob-opt '+(sel?"sel":"")+'" data-act="ob-diet" data-v="'+val+'"><span class="emo">'+emo+'</span><span>'+label+'</span><span class="ck">'+(sel?"✓":"")+'</span></button>';
+}
+function field(lbl,id,val,unit,mode){
+  return '<div class="ob-field"><label>'+lbl+'</label><div class="ob-inwrap"><input id="'+id+'" inputmode="'+mode+'" value="'+(val!=null?val:"")+'" placeholder="0"><span class="unit">'+unit+'</span></div></div>';
+}
+function obResult(pct){
+  var plan=computePlan(obDraft);
+  obDraft._plan=plan;
+  var warn=!plan.feasible;
+  var html='<div class="ob"><div class="ob-brand">ÉLETMÓDVÁLTÁS</div><div class="ob-prog"><i style="width:100%"></i></div>'+
+    '<div class="ob-step"><div class="ob-hi">A terved</div>'+
+    '<div class="card '+(warn?"verdict-warn":"verdict-ok")+'"><div class="verdict-h '+(warn?"warn":"ok")+'">'+(warn?"⚠️ A cél és az idő nem passzol":"✔ Reális cél")+'</div><div class="verdict-t">'+plan.verdict+'</div></div>'+
+    '<div class="card"><div class="eyebrow">Napi célod</div><div class="big-num">'+plan.target+' <span>kcal / nap</span></div>'+
+    '<div class="stat-grid"><div class="stat"><b>'+plan.protein+' g</b><small>Fehérje</small></div><div class="stat"><b>'+plan.carb+' g</b><small>Szénhidrát</small></div><div class="stat"><b>'+plan.fat+' g</b><small>Zsír</small></div></div>'+
+    '<div style="margin-top:12px"><div class="line-row"><span class="k">Fenntartó (TDEE)</span><span class="v">'+plan.tdee+' kcal</span></div>'+
+    (obDraft.goal==="fogyas"||obDraft.goal==="izom"?'<div class="line-row"><span class="k">Ütem</span><span class="v">~'+fmtKg(plan.weeklyRate)+' / hét</span></div>':'')+
+    '<div class="line-row"><span class="k">Edzés</span><span class="v">'+typeLabel(obDraft.type)+' · '+obDraft.freq+'×/hét</span></div>'+
+    '<div class="line-row"><span class="k">Szint</span><span class="v">'+levelLabel(obDraft.level)+'</span></div>'+
+    (obDraft.diet&&obDraft.diet.length?'<div class="line-row"><span class="k">Étkezési szűrő</span><span class="v">'+obDraft.diet.map(dietLabel).join(", ")+'</span></div>':'')+
+    '</div></div>'+
+    '<button class="btn-primary" data-act="ob-finish">'+(warn?"Folytassuk a reális tervvel":"Terv indítása")+'</button>'+
+    '<button class="btn-ghost" data-act="ob-back">Vissza</button>'+
+    '<div class="note" style="border:none;margin-top:6px">A grammra pontos étrend, az allergia-cserék és a bevásárlás ára a következő frissítésben épül be.</div>'+
+    '</div></div>';
+  document.getElementById("root").innerHTML=html;
+}
+function typeLabel(t){ return {street:"Street workout",gym:"Konditerem",cardio:"Kardió",sport:"Csapatsport",mix:"Vegyes"}[t]||t; }
+function levelLabel(l){ return {kezdo:"Kezdő",ujra:"Újrakezdő",kozep:"Középhaladó",halado:"Haladó"}[l]||l; }
+function dietLabel(d){ return {laktoz:"laktózmentes",glutation:"gluténmentes",tojas:"tojásmentes",hal:"halmentes",dio:"diómentes",veget:"vegetáriánus"}[d]||d; }
+
+function readStats(){
+  var a=parseFloat((document.getElementById("in-age")||{}).value),
+      c=parseFloat((document.getElementById("in-cm")||{}).value),
+      k=parseFloat((document.getElementById("in-kg")||{}).value);
+  if(!(a>=13&&a<=100)) return "Add meg az életkorod (13–100).";
+  if(!(c>=120&&c<=230)) return "Add meg a magasságod cm-ben (120–230).";
+  if(!(k>=35&&k<=250)) return "Add meg a testsúlyod kg-ban (35–250).";
+  obDraft.age=Math.round(a); obDraft.cm=Math.round(c); obDraft.kg=Math.round(k*10)/10; return "";
+}
+function readTarget(){
+  var t=parseFloat((document.getElementById("in-target")||{}).value),
+      w=parseFloat((document.getElementById("in-weeks")||{}).value);
+  if(!(t>0&&t<=80)) return "Add meg a cél kilókat.";
+  if(!(w>0&&w<=260)) return "Add meg az időkeretet.";
+  obDraft.targetKg=Math.round(t*10)/10;
+  obDraft.tval=Math.round(w);
+  obDraft.weeks=(obDraft.tunit==="honap")?Math.round(w*4.345):Math.round(w);
+  return "";
+}
+function obNext(){
+  obErr="";
+  if(_curStep==="sex"){ if(!obDraft.sex){ obErr="Válassz egyet."; return renderOnboarding(); } }
+  else if(_curStep==="stats"){ var e=readStats(); if(e){ obErr=e; return renderOnboarding(); } }
+  else if(_curStep==="type"){ if(!obDraft.type){ obErr="Válassz egyet."; return renderOnboarding(); } }
+  else if(_curStep==="freq"){ if(!obDraft.freq){ obErr="Válassz egyet."; return renderOnboarding(); } }
+  else if(_curStep==="level"){ if(!obDraft.level){ obErr="Válassz egyet."; return renderOnboarding(); } }
+  else if(_curStep==="goal"){ if(!obDraft.goal){ obErr="Válassz egyet."; return renderOnboarding(); } }
+  else if(_curStep==="target"){ var e2=readTarget(); if(e2){ obErr=e2; return renderOnboarding(); } }
+  var steps=obVisible(), idx=steps.indexOf(_curStep);
+  if(idx<steps.length-1){ _curStep=steps[idx+1]; }
+  renderOnboarding();
+}
+function obBack(){ obErr=""; var steps=obVisible(), idx=steps.indexOf(_curStep); if(idx>0){ _curStep=steps[idx-1]; renderOnboarding(); } }
+
+/* ---------- MAIN APP ---------- */
+function iso(d){ var m=d.getMonth()+1,day=d.getDate(); return d.getFullYear()+"-"+(m<10?"0"+m:m)+"-"+(day<10?"0"+day:day); }
+function dayDiff(){ var t=new Date(); t.setHours(0,0,0,0); var s=new Date(sel.getFullYear(),sel.getMonth(),sel.getDate()); return Math.round((s-t)/86400000); }
+function relLabel(d){ if(d===0)return "Ma"; if(d===1)return "Holnap"; if(d===-1)return "Tegnap"; if(d===2)return "Holnapután"; if(d===-2)return "Tegnapelőtt"; return d>0?(d+" nap múlva"):(Math.abs(d)+" napja"); }
+function dd(){ var k=iso(sel); if(!state.days[k]) state.days[k]={w:{},r:false,m:{}}; if(!state.days[k].w) state.days[k].w={}; if(!state.days[k].m) state.days[k].m={}; return state.days[k]; }
+function ringSVG(pct){
+  var r=26,c=2*Math.PI*r,off=c*(1-pct/100),done=pct>=100,col=done?"#e7b959":"#ffffff";
+  return '<svg class="ring" viewBox="0 0 64 64" width="50" height="50" aria-hidden="true"><circle cx="32" cy="32" r="'+r+'" fill="none" stroke="rgba(255,255,255,.20)" stroke-width="6"/><circle cx="32" cy="32" r="'+r+'" fill="none" stroke="'+col+'" stroke-width="6" stroke-linecap="round" stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 32 32)"/><text x="32" y="33" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-size="'+(done?"22":"15")+'" font-weight="800" font-family="-apple-system,system-ui,sans-serif">'+(done?"✓":pct)+'</text></svg>';
+}
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function workoutPct(){ var w=workoutFor(sel.getDay()),d=dd(); if(w.rest) return d.r?100:0; var tot=0,done=0; for(var i=0;i<w.ex.length;i++){ tot+=w.ex[i].s; done+=Math.min(d.w[i]||0,w.ex[i].s); } return tot?Math.round(done/tot*100):0; }
+function mealPct(){ var d=dd(),n=0; for(var i=0;i<5;i++) if(d.m[i]) n++; return Math.round(n/5*100); }
+function shopCounts(){ var agg=shopAgg(),tot=0,done=0; for(var id in agg){ tot++; if(state.shop["b-"+id]) done++; } return {tot:tot,done:done}; }
+
+// personalized daily calorie target for a given weekday
+function dayTarget(dow){
+  var base=profile._plan?profile._plan.target:2300;
+  var w=workoutFor(dow);
+  if(w.rest) return Math.round(base*0.95/10)*10;
+  return Math.round(base*1.05/10)*10;
+}
+
+function render(){
+  if(onboarding){ renderOnboarding(); return; }
+  var sc=shopCounts();
+  var pct=tab==="edzes"?workoutPct():tab==="kaja"?mealPct():tab==="bolt"?(sc.tot?Math.round(sc.done/sc.tot*100):0):100;
+  var html='<header class="hd"><div class="hd-top"><div class="brand">ÉLETMÓDVÁLTÁS<small>'+(profile.sex==="no"?"a te tempódban":"edzés · étrend · bolt")+'</small></div>'+ringSVG(pct)+'</div>';
+  if(tab==="terv"){ html+='<div class="hd-sub"><div class="hd-title">A terved</div></div>'; }
+  else if(tab==="bolt"){ html+='<div class="hd-sub"><div class="hd-title">Heti bevásárlás</div><button class="reset" data-act="askreset">Új hét</button></div>'; }
+  else {
+    var diff=dayDiff();
+    html+='<div class="hd-sub"><button class="nav" data-act="day" data-dir="-1" aria-label="Előző nap">‹</button><div class="hd-day"><div class="hd-dayname">'+DAYS[sel.getDay()]+'</div><div class="hd-date">'+relLabel(diff)+' · '+sel.getDate()+'. '+MON[sel.getMonth()]+'</div></div><button class="nav" data-act="day" data-dir="1" aria-label="Következő nap">›</button></div>'+(diff!==0?'<div class="hd-back"><button class="backtoday" data-act="today">↩ Vissza a mai napra</button></div>':'');
+  }
+  html+='</header><main class="content">';
+  if(tab==="terv") html+=viewTerv();
+  else if(tab==="edzes") html+=viewEdzes();
+  else if(tab==="kaja") html+=viewKaja();
+  else html+=viewBolt();
+  html+='</main>';
+  var ic={
+    terv:'<svg viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H18a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.8.4L16 17l-3.2 2.4a1 1 0 0 1-1.2 0L8.4 17 5 19.9a.5.5 0 0 1-.8-.4z"/><path d="M8 9h8M8 12.5h5"/></svg>',
+    edzes:'<svg viewBox="0 0 24 24"><path d="M6.5 6.5v11M17.5 6.5v11M4 9v6M20 9v6M6.5 12h11"/></svg>',
+    kaja:'<svg viewBox="0 0 24 24"><path d="M5 3v7a2 2 0 0 0 4 0V3M7 10v11M18 3c-1.5 0-2.5 2-2.5 5s1 4 2.5 4M18 12v9"/></svg>',
+    bolt:'<svg viewBox="0 0 24 24"><path d="M4 5h2l2.2 10.5a1.5 1.5 0 0 0 1.5 1.2h7.6a1.5 1.5 0 0 0 1.5-1.2L21.5 8H7"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>'
+  };
+  html+='<nav class="tabs">'+tabBtn("terv","Terv",ic.terv)+tabBtn("edzes","Edzés",ic.edzes)+tabBtn("kaja","Kaja",ic.kaja)+tabBtn("bolt","Bolt",ic.bolt)+'</nav>';
+  if(modal) html+='<div class="overlay"><div class="dialog"><div class="dlg-title">Új hét indítása</div><div class="dlg-text">Biztosan új hetet indítasz? Ez törli az összes pipát a bevásárlólistán.</div><div class="dlg-btns"><button class="dlg-cancel" data-act="cancelreset">Mégse</button><button class="dlg-ok" data-act="doreset">Új hét</button></div></div></div>';
+  if(exportModal) html+='<div class="overlay"><div class="dialog"><div class="dlg-title">Bevásárlólista</div><textarea class="exp-area" readonly>'+esc(exportModal)+'</textarea><div class="dlg-btns"><button class="dlg-cancel" data-act="closeexp">Bezár</button></div></div></div>';
+  if(toast) html+='<div class="toast">'+esc(toast)+'</div>';
+  document.getElementById("root").innerHTML=html;
+}
+function tabBtn(id,label,svg){ return '<button class="tab '+(tab===id?"on":"")+'" data-act="tab" data-tab="'+id+'">'+svg+'<span>'+label+'</span></button>'; }
+
+function viewTerv(){
+  var pl=profile._plan||computePlan(profile);
+  var warn=!pl.feasible;
+  var h='<div class="eyebrow">Napi célod</div><div class="card"><div class="big-num">'+pl.target+' <span>kcal / nap</span></div>'+
+    '<div class="stat-grid"><div class="stat"><b>'+pl.protein+' g</b><small>Fehérje</small></div><div class="stat"><b>'+pl.carb+' g</b><small>Szénhidrát</small></div><div class="stat"><b>'+pl.fat+' g</b><small>Zsír</small></div></div></div>';
+  h+='<div class="card '+(warn?"verdict-warn":"verdict-ok")+'"><div class="verdict-h '+(warn?"warn":"ok")+'">'+(warn?"⚠️ A célod finomítva":"✔ A célod")+'</div><div class="verdict-t">'+pl.verdict+'</div></div>';
+  h+='<div class="eyebrow">Részletek</div><div class="card"><div class="line-row"><span class="k">Fenntartó (TDEE)</span><span class="v">'+pl.tdee+' kcal</span></div>'+
+    '<div class="line-row"><span class="k">Nyugalmi (BMR)</span><span class="v">'+pl.bmr+' kcal</span></div>'+
+    (profile.goal==="fogyas"||profile.goal==="izom"?'<div class="line-row"><span class="k">Cél</span><span class="v">'+fmtKg(profile.targetKg)+' / '+profile.tval+' '+(profile.tunit==="honap"?"hónap":"hét")+'</span></div><div class="line-row"><span class="k">Ütem</span><span class="v">~'+fmtKg(pl.weeklyRate)+' / hét</span></div>':'')+
+    '<div class="line-row"><span class="k">Testadatok</span><span class="v">'+profile.age+" év · "+profile.cm+" cm · "+profile.kg+" kg</span></div>"+
+    '<div class="line-row"><span class="k">Edzés</span><span class="v">'+typeLabel(profile.type)+" · "+profile.freq+"×/hét</span></div>"+
+    '<div class="line-row"><span class="k">Szint</span><span class="v">'+levelLabel(profile.level)+'</span></div>'+
+    (profile.diet&&profile.diet.length?'<div class="line-row"><span class="k">Étkezési szűrő</span><span class="v">'+profile.diet.map(dietLabel).join(", ")+'</span></div>':'')+'</div>';
+  h+='<button class="btn-ghost" data-act="edit-profile">Profil / cél szerkesztése</button>';
+  h+='<div class="note">A grammra pontos, személyre szabott étrend, az allergia-alapú ételcserék és a bevásárlás becsült ára a következő frissítésekben érkezik.</div>';
+  return h;
+}
+function viewEdzes(){
+  var w=workoutFor(sel.getDay()),d=dd(),eye=typeLabel(profile.type)+" · heti "+freqDays();
+  if(w.rest){ return '<div class="eyebrow">'+esc(eye)+'</div><div class="card rest-card"><div class="rest-emoji">🌿</div><div class="rest-title">Pihenőnap</div><div class="rest-text">'+esc(w.text)+'</div><button class="toggle '+(d.r?"on":"")+'" data-act="rest"><span class="tick">'+(d.r?"✓":"")+'</span>'+(d.r?"Aktív pihenő kész":"Volt egy séta / bringa")+'</button></div>'; }
+  var h='<div class="eyebrow">'+esc(eye)+'</div><div class="card sess"><div><div class="s-name">'+esc(w.name)+'</div><div class="s-tag">'+esc(w.tag)+'</div></div>'+(w.hint?'<div class="s-hint">'+esc(w.hint)+'</div>':'')+'</div>';
+  h+='<div class="lvl-note">'+esc(lvlHint(profile.level))+'</div>';
+  for(var i=0;i<w.ex.length;i++){ var e=w.ex[i],done=(d.w[i]||0)>=e.s,pips='',tgt=(e.s>1?e.s+" × ":"")+e.reps;
+    for(var j=0;j<e.s;j++) pips+='<button class="pip '+(j<(d.w[i]||0)?"on":"")+'" data-act="pip" data-ex="'+i+'" data-set="'+j+'"></button>';
+    h+='<div class="card ex '+(done?"is-done":"")+'"><div class="ex-top"><div class="ex-name">'+esc(e.n)+'</div><div class="ex-target">'+esc(tgt)+'</div></div><div class="pips">'+pips+'</div>'+(e.note?'<div class="ex-note">'+esc(e.note)+'</div>':'')+'</div>';
+  }
+  return h;
+}
+function macroRow(lbl,v,t){ var w=Math.min(100,Math.round(v/t*100)); return '<div class="mrow"><span class="mlbl">'+lbl+'</span><span class="mval">'+v+' <em>/ '+t+' g</em></span></div><div class="mmini"><i style="width:'+w+'%"></i></div>'; }
+function viewKaja(){
+  var dow=sel.getDay(), arr=MEALS[dow], d=dd(), pl=profile._plan||computePlan(profile);
+  var dT=dayTarget(dow), factor=dayFactor(dow);
+  var pT=pl.protein, fT=pl.fat, cT=Math.max(40,Math.round((dT-pT*4-fT*9)/4));
+  var ck=0,kc=0,p=0,c=0,f=0;
+  for(var i=0;i<arr.length;i++){ if(d.m[i]){ var tt=mealTotals(arr[i],factor); ck++; kc+=tt.kc; p+=tt.p; c+=tt.c; f+=tt.f; } }
+  var full=(ck===arr.length),kpct=Math.min(100,Math.round(kc/dT*100)),left=Math.max(0,dT-kc);
+  var tag=workoutFor(dow).rest?"pihenőnap · alacsonyabb szénhidrát":"edzésnap · magasabb szénhidrát";
+  var h='<div class="eyebrow">Napi cél · eddig bevitt</div><div class="card track '+(full?"is-full":"")+'"><div class="track-top"><div class="t-eaten">'+kc+'<span> / '+dT+' kcal</span></div>'+(full?'<div class="t-badge">Napi cél kész 💪</div>':'<div class="t-left">még '+left+' kcal</div>')+'</div><div class="kbar"><i style="width:'+kpct+'%"></i></div><div class="t-tag">'+tag+'</div>'+macroRow("Fehérje",p,pT)+macroRow("Szénhidrát",c,cT)+macroRow("Zsír",f,fT);
+  var flags=(profile.diet||[]);
+  if(flags.length) h+='<div class="portion-note">Az étrend a szűrőidhez igazítva: '+flags.map(dietLabel).join(", ")+'. Egy hozzávalót a ↻ gombbal cserélhetsz, ha nem szereted.</div>';
+  else h+='<div class="portion-note">A grammok a napi célodra méretezve. A ↻ gombbal bármelyik hozzávalót lecserélheted.</div>';
+  h+='</div><div class="eyebrow">Étkezések</div>';
+  for(var i2=0;i2<arr.length;i2++){ var me=arr[i2],chk=!!d.m[i2],op=(openMeal===i2),mt=mealTotals(me,factor);
+    var rows='';
+    for(var j=0;j<me.i.length;j++){ var oid=me.i[j][0],rid=resolveIng(oid),g2=roundStep(me.i[j][1]*factor,ING[rid].step);
+      rows+='<div class="ing-row"><span class="ing-amt">'+dispAmt(rid,g2)+'</span><span class="ing-nm">'+esc(ingName(rid))+'</span>'+(swappable(oid)?'<button class="ing-sw" data-act="swapi" data-ig="'+oid+'" aria-label="Csere">↻</button>':'<span class="ing-sw ghost"></span>')+'</div>'; }
+    var steps='';
+    for(var k=0;k<me.pr.length;k++) steps+='<li>'+esc(me.pr[k])+'</li>';
+    h+='<div class="card meal '+(chk?"is-done":"")+'"><div class="meal-row"><button class="meal-check '+(chk?"on":"")+'" data-act="meal" data-m="'+i2+'">'+(chk?"✓":"")+'</button><button class="meal-main" data-act="expand" data-m="'+i2+'"><div class="meal-name">'+esc(me.m)+' <span class="meal-kcal">· '+mt.kc+' kcal</span></div><div class="meal-food">'+esc(mealFoodLine(me,factor))+'</div></button><button class="caret '+(op?"open":"")+'" data-act="expand" data-m="'+i2+'">›</button></div>'+(op?'<div class="prep"><div class="p-h">Hozzávalók</div><div class="ings">'+rows+'</div><div class="p-h" style="margin-top:15px">Elkészítés</div><ol>'+steps+'</ol></div>':'')+'</div>';
+  }
+  return h;
+}
+var CATN={hus:"Hús & hal",tojas:"Tojás",tej:"Tejtermék",hutott:"Hűtött",zold:"Zöldség & gyümölcs",fagy:"Fagyasztott",szaraz:"Száraz áru",pek:"Pékáru",kamra:"Kamra · fűszerek"};
+var CATORDER=["hus","tojas","tej","hutott","zold","fagy","szaraz","pek","kamra"];
+function shopAgg(){ var agg={}; for(var dow=0;dow<7;dow++){ var factor=dayFactor(dow),meals=MEALS[dow]; for(var mi=0;mi<meals.length;mi++){ var it=meals[mi].i; for(var j=0;j<it.length;j++){ var rid=resolveIng(it[j][0]),g=roundStep(it[j][1]*factor,ING[rid].step); agg[rid]=(agg[rid]||0)+g; } } } return agg; }
+function shopAmt(id,grams){ var g=ING[id]; if(g.u==="db") return Math.ceil(grams/g.ug)+" db"; if(g.u==="szelet") return Math.ceil(grams/g.ug)+" szelet"; if(g.u==="ml"){ return grams>=1000?((Math.round(grams/100)/10)+" l"):(Math.round(grams)+" ml"); } return grams>=1000?((Math.round(grams/100)/10)+" kg"):(Math.round(grams)+" g"); }
+function ingCost(id,grams){ return Math.round(grams/1000*ING[id].price); }
+function shopTotal(){ var agg=shopAgg(),tt=0; for(var id in agg) tt+=ingCost(id,agg[id]); return tt; }
+function fmtFt(n){ return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")+" Ft"; }
+function buildExport(){ var agg=shopAgg(),L=["ÉLETMÓDVÁLTÁS — heti bevásárlólista",""];
+  for(var ci=0;ci<CATORDER.length;ci++){ var cat=CATORDER[ci],ids=[]; for(var id in agg){ if(ING[id].cat===cat) ids.push(id); } if(!ids.length) continue;
+    L.push(CATN[cat].toUpperCase()); for(var k=0;k<ids.length;k++){ var d=ids[k]; L.push("- "+shopAmt(d,agg[d])+"  "+ingName(d)); } L.push(""); }
+  L.push("Becsült érték: ~"+fmtFt(shopTotal())+" / hét"); L.push("(A kamrai alapok — olaj, méz, fűszerek — ritkán pótlandók.)"); return L.join("\n"); }
+function doExport(){ var txt=buildExport();
+  if(navigator.share){ navigator.share({title:"Bevásárlólista",text:txt}).catch(function(){}); return; }
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ toast="Kimásolva a vágólapra ✓"; render(); setTimeout(function(){ toast=""; render(); },1800); }).catch(function(){ exportModal=txt; render(); }); return; }
+  exportModal=txt; render(); }
+function viewBolt(){
+  var agg=shopAgg(),cnt=shopCounts(),pct=cnt.tot?Math.round(cnt.done/cnt.tot*100):0,total=shopTotal();
+  var h='<div class="card"><div class="prog-top"><div class="prog-lbl">Heti lista · '+cnt.tot+' tétel</div><div class="prog-num">'+cnt.done+'/'+cnt.tot+' megvéve</div></div><div class="bar"><i style="width:'+pct+'%"></i></div><div class="shop-total"><span>Becsült érték</span><b>~'+fmtFt(total)+' / hét</b></div><button class="btn-primary shop-export" data-act="export">Lista exportálása / megosztása</button></div>';
+  for(var ci=0;ci<CATORDER.length;ci++){ var cat=CATORDER[ci],ids=[]; for(var id in agg){ if(ING[id].cat===cat) ids.push(id); } if(!ids.length) continue;
+    h+='<div class="cat-h">'+esc(CATN[cat])+'</div>';
+    for(var k=0;k<ids.length;k++){ var d=ids[k],key="b-"+d,ck=!!state.shop[key];
+      h+='<button class="shop-row '+(ck?"is-done":"")+'" data-act="shop" data-key="'+key+'"><span class="box">'+(ck?"✓":"")+'</span><span class="shop-label">'+esc(shopAmt(d,agg[d]))+' · '+esc(ingName(d))+'</span><span class="shop-price">~'+fmtFt(ingCost(d,agg[d]))+'</span></button>';
+    }
+  }
+  h+='<div class="note">A lista a heti tervedből számolva, a cseréiddel együtt. A kamrai alapok (olaj, méz, fűszerek) ritkán pótlandók, így a valós heti költség jellemzően ennél is kevesebb.'+(storageOK?'':' — Most nem tudja menteni a haladást.')+'</div>';
+  return h;
+}
+
+/* ---------- EVENTS ---------- */
+document.addEventListener("click",function(ev){
+  var el=ev.target.closest("[data-act]"); if(!el) return;
+  var act=el.getAttribute("data-act");
+  // onboarding
+  if(act==="ob-pick"){ var key=el.getAttribute("data-key"),v=el.getAttribute("data-v"); obDraft[key]=v; obErr=""; if(key==="sex") applyTheme(v); renderOnboarding(); return; }
+  if(act==="ob-diet"){ var v2=el.getAttribute("data-v"); obDraft.diet=obDraft.diet||[]; var ix=obDraft.diet.indexOf(v2); if(ix>=0) obDraft.diet.splice(ix,1); else obDraft.diet.push(v2); renderOnboarding(); return; }
+  if(act==="ob-unit"){ if(_curStep==="target"){ var iv=document.getElementById("in-weeks"); if(iv) obDraft.tval=iv.value; } obDraft.tunit=el.getAttribute("data-v"); renderOnboarding(); return; }
+  if(act==="ob-next"){ obNext(); return; }
+  if(act==="ob-back"){ obBack(); return; }
+  if(act==="ob-finish"){ profile={sex:obDraft.sex,age:obDraft.age,cm:obDraft.cm,kg:obDraft.kg,type:obDraft.type,freq:obDraft.freq,level:obDraft.level,goal:obDraft.goal,targetKg:obDraft.targetKg,tval:obDraft.tval,tunit:obDraft.tunit,weeks:obDraft.weeks,diet:obDraft.diet||[],_plan:obDraft._plan||computePlan(obDraft)}; saveProfile(); applyTheme(profile.sex); onboarding=false; tab="terv"; render(); return; }
+  if(act==="edit-profile"){ obDraft=JSON.parse(JSON.stringify(profile)); onboarding=true; _curStep="sex"; obErr=""; renderOnboarding(); return; }
+  // app
+  if(act==="tab"){ tab=el.getAttribute("data-tab"); openMeal=-1; render(); return; }
+  if(act==="day"){ var dir=parseInt(el.getAttribute("data-dir"),10); sel=new Date(sel.getFullYear(),sel.getMonth(),sel.getDate()+dir); openMeal=-1; render(); return; }
+  if(act==="today"){ sel=new Date(); openMeal=-1; render(); return; }
+  if(act==="pip"){ var i=+el.getAttribute("data-ex"),j=+el.getAttribute("data-set"),d=dd(),cur=d.w[i]||0; d.w[i]=(cur===j+1)?j:(j+1); saveState(); render(); return; }
+  if(act==="rest"){ var dr=dd(); dr.r=!dr.r; saveState(); render(); return; }
+  if(act==="meal"){ var dm=dd(),mi=+el.getAttribute("data-m"); dm.m[mi]=!dm.m[mi]; saveState(); render(); return; }
+  if(act==="expand"){ var e2=+el.getAttribute("data-m"); openMeal=(openMeal===e2)?-1:e2; render(); return; }
+  if(act==="swapi"){ var oid=el.getAttribute("data-ig"); if(!profile.swaps) profile.swaps={}; var nx=nextInGroup(oid); if(nx===oid) delete profile.swaps[oid]; else profile.swaps[oid]=nx; saveProfile(); render(); return; }
+  if(act==="shop"){ var k=el.getAttribute("data-key"); if(state.shop[k]) delete state.shop[k]; else state.shop[k]=true; saveState(); render(); return; }
+  if(act==="askreset"){ modal=true; render(); return; }
+  if(act==="cancelreset"){ modal=false; render(); return; }
+  if(act==="doreset"){ state.shop={}; saveState(); modal=false; render(); return; }
+  if(act==="export"){ doExport(); return; }
+  if(act==="closeexp"){ exportModal=""; render(); return; }
+});
+render();
+})();
+</script>
+</body>
+</html>
